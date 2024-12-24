@@ -1,13 +1,16 @@
 import mysql from 'mysql2'
 const psswd = process.env.password
+const hosting = process.env.LHost
+const user = process.env.UsedUSer
+const MYSQL_nameDATABASE = process.env.DATABASENAME 
 
 const pool = mysql.createPool({
-    host: '127.0.0.1',
-    user:'root',
+    host: hosting,
+    user: user,
     password: psswd,
-    database: 'notes_app',
+    database: MYSQL_nameDATABASE,
     port: 0
-}).promise()
+}).promise() 
 
 async function getNotes() {
     const result = await pool.query("SELECT * FROM notes;");
@@ -16,6 +19,34 @@ async function getNotes() {
     return rows;
 }
 
-const notes= await getNotes();
-console.log(notes);
+async function getNote(id) {
+    const [result] = await pool.query(
+        `SELECT *
+        FROM notes
+        WHERE id = ?`, id
+    );
 
+    const rows = result;
+    return rows;
+}
+
+async function createNote(title,content) {
+    const result = await pool.query(
+        `INSERT INTO
+        notes(title,content) 
+        VALUES (?,?)`, [title,content]
+    );
+
+    return {
+        id: result.insertId,
+        title,
+        content
+    }
+}
+
+const notes= await getNotes();
+const note = await getNote(4);
+const creation = await createNote("Fourth Note","This is text 4");
+console.log(notes);
+console.log(note)
+console.log(creation)
