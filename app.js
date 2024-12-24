@@ -20,13 +20,14 @@ app.post("/notes", async (req,res)=>{
     const {title,content} = req.body; 
     const notes = await createNote(title,content);
     res.status(201).send(notes);
-})
+})  
 
 
 app.use((err,req,res,next)=>{
-    console.error(err.stack);
-    res.status(500).send('Something want wrong')
+    console.error(err.stack); 
+    res.status(500).send('Something went wrong')
 })
+
 
 app.listen(8080,()=>{
     console.log('Server running on 8080')

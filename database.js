@@ -11,7 +11,7 @@ export const pool = mysql.createPool({
     database: MYSQL_nameDATABASE,
     port: 0
 }).promise() 
-
+  
 export async function getNotes() {
     const result = await pool.query("SELECT * FROM notes;");
 
